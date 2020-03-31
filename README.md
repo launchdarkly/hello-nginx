@@ -1,2 +1,3 @@
-# lua-server-sdk-examples
-Examples of integrating the Lua server SDK in applications
+# Lua server SDK examples
+
+Simple ready to run examples of integrating the Lua server SDK into various applications.
