@@ -1,73 +1,25 @@
 version: 2.1
 
-orbs:
-   win: circleci/windows@1.0.0
-
 workflows:
   version: 2
   build_and_test_all:
     jobs:
       - build-test-linux
-      - build-test-osx
-      - build-test-windows
 
 jobs:
   build-test-linux:
     docker:
-      - image: ldcircleci/ld-c-sdk-ubuntu  # defined in sdks-ci-docker project
-      - image: redis
-    environment:
-      CTEST_OUTPUT_ON_FAILURE: 1
+      - image: circleci/python:2 # same image restwrappers use
     steps:
       - checkout
       - run:
-          name: Build
-          command: |
-            mkdir build && cd build
-            cmake -D REDIS_STORE=ON ..
-            cmake --build .
+          name: Build Image
+          command: docker build -t launchdarkly-nginx .
       - run:
-          name: Test
-          command: ./.ldrelease/test.sh
-
-  build-test-osx:
-    macos:
-      xcode: "9.0"
-    environment:
-      CTEST_OUTPUT_ON_FAILURE: 1
-    steps:
-      - checkout
-      - run:
-          name: Install redis
-          command: HOMEBREW_NO_AUTO_UPDATE=1 brew install redis
-      - run:
-          name: Start Redis
-          command: redis-server
+          name: Run Image
+          command: docker run --rm -p 8123:80 -e LD_SDK_KEY="a" -e LD_FLAG_KEY="a" launchdarkly-nginx
           background: true
       - run:
-          name: Install prerequisites
-          command: ./.ldrelease/mac-prepare.sh
-      - run:
-          name: Build
-          command: |
-            mkdir build && cd build
-            cmake -D REDIS_STORE=ON ..
-            cmake --build .
-      - run:
-          name: Test
-          command: ./.ldrelease/test.sh
-
-  build-test-windows:
-    executor:
-      name: win/vs2019
-      shell: powershell.exe
-    environment:
-      CTEST_OUTPUT_ON_FAILURE: 1
-    steps:
-      - checkout
-      - run:
-          name: Build
-          command: ./.ldrelease/build.ps1
-      - run:
-          name: Test
-          command: ./.ldrelease/test.ps1
+          name: Test Image
+          command: until $(curl --output /dev/null --silent --fail http://localhost:8123/); do echo 'still waiting for nginx...'; sleep 5; done
+          timeout: 300
