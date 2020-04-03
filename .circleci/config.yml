@@ -12,6 +12,7 @@ jobs:
       - image: circleci/python:2 # same image restwrappers use
     steps:
       - checkout
+      - setup_remote_docker
       - run:
           name: Build Image
           command: docker build -t launchdarkly-nginx .
