@@ -18,9 +18,9 @@ jobs:
           command: docker build -t launchdarkly-nginx .
       - run:
           name: Run Image
-          command: docker run --rm -p 8123:80 -e LD_SDK_KEY="a" -e LD_FLAG_KEY="a" launchdarkly-nginx
+          command: docker run --rm --name nginx -e LD_SDK_KEY="a" -e LD_FLAG_KEY="a" launchdarkly-nginx
           background: true
       - run:
           name: Test Image
-          command: until $(curl --output /dev/null --silent --fail http://localhost:8123/); do echo 'still waiting for nginx...'; sleep 5; done
+          command: docker run --network container:nginx appropriate/curl --retry 10 --retry-connrefused http://localhost:80
           timeout: 300
