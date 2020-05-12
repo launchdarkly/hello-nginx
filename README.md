@@ -1,6 +1,6 @@
 # LaunchDarkly Lua Server-Side SDK NGINX example
 
-This is a minimal dockerized example of using the Lua SDK with the OpenResty NGINX framework.
+This is a minimal dockerized example of using the Lua SDK with the [OpenResty NGINX framework](https://openresty-reference.readthedocs.io/en/latest/Lua_Nginx_API/).
 
 ## Usage
 
