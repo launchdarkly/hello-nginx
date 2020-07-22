@@ -1,4 +1,4 @@
-local ld = require("launchdarkly-server-sdk")
+local ld = require("launchdarkly_server_sdk")
 local os = require("os")
 
 return ld.clientInit({
