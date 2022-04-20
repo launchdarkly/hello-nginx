@@ -4,23 +4,31 @@ workflows:
   version: 2
   build_and_test_all:
     jobs:
-      - build-test-linux
+      - build-test-linux:
+          context:
+            - hello-world-demos
 
 jobs:
   build-test-linux:
     docker:
-      - image: circleci/python:2 # same image restwrappers use
+      - image: cimg/base:2022.04
     steps:
       - checkout
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 20.10.12
       - run:
           name: Build Image
           command: docker build -t launchdarkly-nginx .
       - run:
           name: Run Image
-          command: docker run --rm --name nginx -e LD_SDK_KEY="a" -e LD_FLAG_KEY="a" launchdarkly-nginx
+          command: |
+            docker run --rm --name nginx \
+            -e LD_SDK_KEY="${LD_HELLO_WORLD_SDK_KEY}" \
+            -e LD_FLAG_KEY="${LD_HELLO_WORLD_FLAG_KEY_WITH_TRUE_VALUE}" launchdarkly-nginx
           background: true
       - run:
           name: Test Image
-          command: docker run --network container:nginx appropriate/curl --retry 10 --retry-connrefused http://localhost:80
+          command: |
+            docker run --network container:nginx appropriate/curl --retry 10 --retry-connrefused http://localhost:80 | tee output.txt
+            grep "feature launched" output.txt || (echo "Flag did not evaluate to expected true value" && exit 1)
           timeout: 300
