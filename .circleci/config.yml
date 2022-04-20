@@ -14,7 +14,8 @@ jobs:
       - image: cimg/base:2022.04
     steps:
       - checkout
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 20.10.12
       - run:
           name: Build Image
           command: docker build -t launchdarkly-nginx .
