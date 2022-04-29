@@ -8,6 +8,18 @@ workflows:
           context:
             - hello-world-demos
 
+  test-daily:
+    triggers:
+    - schedule:
+        cron: "0 6 * * *"
+        filters:
+          branches:
+            only: master
+    jobs:
+      - build-test-linux:
+          context:
+            - hello-world-demos
+
 jobs:
   build-test-linux:
     docker:
