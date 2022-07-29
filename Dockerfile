@@ -1,4 +1,4 @@
-FROM openresty/openresty:buster
+FROM openresty/openresty:focal
 
 RUN apt-get update && apt-get install -y build-essential git cmake \
     libpcre3-dev libcurl4-openssl-dev luarocks
