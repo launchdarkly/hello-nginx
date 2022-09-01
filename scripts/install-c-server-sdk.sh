@@ -12,8 +12,7 @@ git clone "https://github.com/launchdarkly/c-server-sdk.git"
 
 cd c-server-sdk
 
-VERSION=$(git tag -l "${MAJOR_VERSION}.*" --sort=-v:refname | head -n1)
-git checkout "$VERSION"
+git checkout cw/test-cmake-change
 mkdir build && cd build
 
 cmake -D BUILD_TESTING=OFF -D BUILD_SHARED_LIBS=ON ..
