@@ -42,5 +42,5 @@ jobs:
           name: Test Image
           command: |
             docker run --network container:nginx appropriate/curl --retry 10 --retry-connrefused http://localhost:80 | tee output.txt
-            grep "feature launched" output.txt || (echo "Flag did not evaluate to expected true value" && exit 1)
+            grep "flag is true" output.txt || (echo "Flag did not evaluate to expected true value" && exit 1)
           timeout: 300
