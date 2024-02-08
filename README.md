@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> Please see [Lua Server SDK](https://github.com/launchdarkly/lua-server-sdk) for the most up-to-date `hello-nginx`. This repo is deprecated.
+
 # LaunchDarkly Lua server-side SDK NGINX example
 
 We've built a minimal dockerized example of using the Lua SDK with [OpenResty NGINX framework](https://openresty-reference.readthedocs.io/en/latest/Lua_Nginx_API/). For more comprehensive instructions, you can visit the [Using the Lua SDK with NGINX](https://docs.launchdarkly.com/guides/sdk/nginx) guide or the [Lua reference guide](https://docs.launchdarkly.com/sdk/server-side/lua).
